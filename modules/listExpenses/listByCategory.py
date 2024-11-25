@@ -1,23 +1,30 @@
 from modules.utils.fileHandler import readJSON
 from tabulate import tabulate
 
+#Se lista y muestra los gastos filtrados por categoría
 def listByCategory():
-    filePath = 'databases/expenses.json'
+    #Se solicita al usuario la categoría para filtrar
+    category = input("Ingrese la categoría que desea filtrar: ").strip()
+    #Se define la ruta al archivo de gastos
+    filePath = "databases/expenses.json"
+    #Se leen los gastos desde el archivo
     expenses = readJSON(filePath)
 
-    if not expenses["gastos"]:
-        print("No hay gastos registrados.")
-        return
+    #Se filtran los gastos que coincidan con la categoría
+    filteredExpenses = [expense for expense in expenses if expense["category"].lower() == category.lower()]
 
-    category = input("Ingrese la categoría que desea consultar: ")
+    #Se verifica si hay gastos para mostrar
+    if filteredExpenses:
+        #Se prepara la tabla con los datos filtrados
+        table = [[
+            expense["date"],
+            expense["amount"],
+            expense["currency"],
+            expense["description"]
+        ] for expense in filteredExpenses]
 
-    filteredExpenses = [
-        [expense["fecha"], expense["monto"], expense["moneda"], expense["categoría"], expense["descripción"]]
-        for expense in expenses["gastos"] if expense["categoría"].lower() == category.lower()
-    ]
-
-    if not filteredExpenses:
-        print(f"No se encontraron gastos en la categoría '{category}'.")
+        #Se imprime la tabla con los gastos filtrados
+        print(tabulate(table, headers=["Fecha", "Monto", "Moneda", "Descripción"], tablefmt="grid"))
     else:
-        print(f"Gastos en la categoría '{category}':")
-        print(tabulate(filteredExpenses, headers=["Fecha", "Monto", "Moneda", "Categoría", "Descripción"], tablefmt="grid"))
+        #Se informa al usuario si no hay gastos registrados para la categoría
+        print(f"No hay gastos registrados en la categoría '{category}'.")

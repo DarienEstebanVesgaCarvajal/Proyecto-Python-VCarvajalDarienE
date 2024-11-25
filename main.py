@@ -1,8 +1,8 @@
 import os
 from modules.registerExpense import registerExpense
-from modules.listExpenses import listExpenses
-from modules.filterExpenses import filterExpenses
-from modules.generateReports import generateReports
+from modules.listExpenses.listAllExpenses import listExpenses
+from modules.calculateTotal.calculateTotal import filterExpenses
+from modules.generateReports.generateAllReports import generateReports
 
 def displayMenu():
     title = "Simulador de Gastos"

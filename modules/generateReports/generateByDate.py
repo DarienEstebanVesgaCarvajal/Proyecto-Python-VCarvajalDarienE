@@ -1,25 +1,41 @@
 from modules.utils.fileHandler import readJSON
 from tabulate import tabulate
+import os
 
-def generateByDates():
+def generateByDate():
     filePath = 'databases/expenses.json'
     expenses = readJSON(filePath)
 
-    if not expenses["gastos"]:
-        print("No hay gastos registrados.")
-        return
-
-    startDate = input("Ingrese la fecha de inicio (DD-MM-AA): ")
-    endDate = input("Ingrese la fecha de fin (DD-MM-AA): ")
-
-    filteredExpenses = [
-        [expense["fecha"], expense["monto"], expense["moneda"], expense["categoría"], expense["descripción"]]
-        for expense in expenses["gastos"]
-        if startDate <= expense["fecha"] <= endDate
+    title = "Reporte de Gastos por Fecha"
+    instructions = [
+        "Este reporte organiza todos los gastos por orden cronológico.",
+        "Incluye totales diarios para facilitar el análisis."
     ]
 
-    if not filteredExpenses:
-        print(f"No se encontraron gastos entre {startDate} y {endDate}.")
-    else:
-        print(f"Gastos entre {startDate} y {endDate}:")
-        print(tabulate(filteredExpenses, headers=["Fecha", "Monto", "Moneda", "Categoría", "Descripción"], tablefmt="grid"))
+    maxLength = max(len(title), *(len(instruction) for instruction in instructions))
+    line = ":" * (maxLength + 4)
+
+    os.system('clear')
+    print(line)
+    print(f"{title:^{maxLength + 4}}")
+    print(line)
+    for instruction in instructions:
+        print(f"{instruction:<{maxLength}}")
+    print(line)
+
+    if not expenses["gastos"]:
+        print("No hay datos disponibles para generar un reporte.")
+        return
+
+    dates = {}
+    for gasto in expenses["gastos"]:
+        date = gasto["fecha"]
+        amount = gasto["monto"] if gasto["moneda"] == "COP" else gasto["monto"] * 4500
+        dates[date] = dates.get(date, 0) + amount
+
+    dateTable = [[date, amount] for date, amount in sorted(dates.items())]
+    print("Detalle por Fechas (en COP):")
+    print(tabulate(dateTable, headers=["Fecha", "Monto (COP)"], tablefmt="grid"))
+    print(line)
+
+    print("¡Reporte generado exitosamente!")

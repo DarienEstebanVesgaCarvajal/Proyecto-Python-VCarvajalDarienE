@@ -1,23 +1,32 @@
-import os
+from modules.registerExpense import registerExpense
+from modules.listExpenses import listExpenses
+from modules.calculateTotal import calculateTotal
+from modules.listExpenses.listByCategory import listByCategory
+from modules.listExpenses.listByDate import listByDate
 
-def displayMenu():
-    title = "Simulador de Gastos"
-    options = [
-        "Seleccione una opción:",
-        "1. Registrar nuevo gasto",
-        "2. Listar gastos",
-        "3. Calcular total de gastos",
-        "4. Generar reporte de gastos",
-        "5. Salir"
-    ]
+def showMainMenu():
+    print("\nSeleccione una opción:")
+    print("1. Registrar un nuevo gasto")
+    print("2. Listar todos los gastos")
+    print("3. Calcular total de gastos por moneda")
+    print("4. Listar gastos por categoría")
+    print("5. Listar gastos por rango de fechas")
+    print("6. Salir")
 
-    maxLength = max(len(title), *(len(option) for option in options))
-    line = (":" * (maxLength + 4))
+    option = input("Seleccione una opción (1-6): ").strip()
 
-    os.system('clear')
-    print(line)
-    print(f"{title:^{maxLength + 4}}")
-    print(line)
-    for option in options:
-        print(f"{option:<{maxLength}}")
-    print(line)
+    if option == "1":
+        registerExpense()
+    elif option == "2":
+        listExpenses()
+    elif option == "3":
+        calculateTotal()
+    elif option == "4":
+        listByCategory()
+    elif option == "5":
+        listByDate()
+    elif option == "6":
+        print("Saliendo del programa...")
+        exit()
+    else:
+        print("Opción no válida. Por favor, intente nuevamente.")

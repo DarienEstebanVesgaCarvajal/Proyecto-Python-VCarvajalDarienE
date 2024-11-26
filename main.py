@@ -13,7 +13,6 @@ signal.signal(signal.SIGINT, customSignalHandler)
 
 # Se ejecuta el programa desde aquí
 if __name__ == "__main__":
-    while True:
         # Limpia la consola antes de mostrar el menú
         os.system('clear')
         mainMenu()

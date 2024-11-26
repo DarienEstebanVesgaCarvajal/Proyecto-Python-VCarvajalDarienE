@@ -46,7 +46,7 @@ def listByCategory(filePath):
             for expense in filteredExpenses
         ]
         # Se imprime la tabla con encabezados claros
-        print(tabulate(table, headers=["Fecha", "Monto", "Moneda", "Descripción"], tablefmt="grid"))
+        print(tabulate(table, headers=["Fecha", "Monto", "Descripción"], tablefmt="grid"))
         print(f"\n¡Listado de gastos en la categoría '{selectedCategory}' completado!")  # Mensaje de finalización
 
     except FileNotFoundError:

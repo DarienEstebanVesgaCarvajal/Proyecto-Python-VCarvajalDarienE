@@ -1,50 +1,124 @@
-# **Simulador de Gasto Diario**
+Claro, aquí tienes el instructivo completo en formato para un archivo `README.md`:
 
-El Simulador de Gasto Diario es una aplicación de consola diseñada para ayudar a los usuarios a registrar y monitorear sus gastos diarios en diferentes categorías, como comida, transporte, entretenimiento, entre otros. Este simulador permite llevar un control básico de los gastos diarios, semanales o mensuales y obtener un resumen o reporte de los gastos en cada categoría. Toda la información se guarda en un archivo JSON, lo que permite mantener un historial de gastos entre distintas sesiones del programa.
+```markdown
+# Simulador de Gasto Diario
 
-## **Problemática**
+Este programa permite registrar y generar reportes de los gastos en diferentes rangos de tiempo, ya sea semanal o mensual. Los datos de los gastos se almacenan en un archivo JSON y se pueden visualizar a través de la consola en formato tabular.
 
-Muchos usuarios desean llevar un registro de sus gastos, pero las aplicaciones de gestión financiera completas pueden ser complicadas y requieren configuraciones avanzadas. Este proyecto ofrece una solución simple y accesible para aquellos que buscan hacer un seguimiento básico de sus gastos en un formato amigable y sin demasiadas complejidades. Con el Simulador de Gasto Diario, los usuarios pueden organizar sus gastos de forma práctica y recibir una visión clara de su situación financiera diaria, semanal o mensual.
+## Funcionalidades
 
-### Tecnologías y Herramientas
+1. **Ingreso de Gastos:**
+   El programa permite al usuario registrar gastos con la siguiente información:
+   - **Nombre del gasto:** Descripción breve del gasto (por ejemplo, "Compra de alimentos").
+   - **Monto:** Valor numérico del gasto (puede ser en cualquier moneda).
+   - **Fecha:** La fecha en la que ocurrió el gasto, en formato `YYYY-MM-DD` (por ejemplo, `2024-11-25`).
+   - **Categoría:** La categoría del gasto (por ejemplo, "Alimentos", "Transporte", "Entretenimiento", etc.).
 
-- Front-end: 
-- Recursos: 
-- Diseño de los menus: https://gist.github.com/programmersland/cf9362472f1b9f245415d9cee96c7aef
-- Librería para mostrar la información en formato de tablas:  https://pypi.org/project/tabulate/
-- GitHub: Para la gestión de versiones del código en el desarrollo, usando conventional commits.
+   **Los gastos registrados se guardan en un archivo JSON**, que guarda un historial de todos los gastos ingresados. Este archivo puede ser cargado posteriormente para generar reportes.
 
-### Funcionalidades Principales
+2. **Generación de Reportes:**
+   El programa permite generar dos tipos de reportes de los gastos registrados:
+   - **Reporte Semanal:**
+     Muestra los gastos registrados durante la última semana (últimos 7 días desde la fecha actual). Incluye el total de los gastos de la semana y un desglose detallado de cada gasto con su nombre, monto, categoría y fecha.
+   - **Reporte Mensual:**
+     Muestra los gastos registrados durante el mes actual. Incluye el total de los gastos del mes y un desglose detallado de cada gasto con su nombre, monto, categoría y fecha.
 
-1. Registrar Gasto:
+3. **Estructura del Archivo JSON:**
+   El archivo JSON donde se almacenan los datos tiene la siguiente estructura:
+   ```json
+   [
+     {
+       "nombre": "Compra de alimentos",
+       "monto": 50.00,
+       "fecha": "2024-11-25",
+       "categoria": "Alimentos"
+     },
+     {
+       "nombre": "Transporte público",
+       "monto": 10.00,
+       "fecha": "2024-11-24",
+       "categoria": "Transporte"
+     }
+   ]
+   ```
 
-- Permite al usuario ingresar un nuevo gasto, especificando la cantidad, categoría (como comida, transporte, etc.) y una breve descripción opcional.
-- Guarda esta información en un archivo JSON para conservar el registro entre sesiones.
+   Cada elemento del archivo es un objeto que representa un gasto con las claves:
+   - **nombre:** Descripción del gasto.
+   - **monto:** Valor del gasto.
+   - **fecha:** Fecha en formato `YYYY-MM-DD`.
+   - **categoria:** Categoría del gasto.
 
-2. Listar Gastos:
+4. **Manejo de Errores:**
+   El programa incluye un manejo de excepciones para asegurarse de que el archivo JSON esté correctamente estructurado. En caso de que falte alguna clave esperada (como "nombre", "monto", "fecha" o "categoria"), se mostrará un mensaje de error. Además, si ocurre cualquier otro tipo de error, se mostrará un mensaje de error general.
 
-- Muestra todos los gastos registrados, con detalles como fecha, categoría, cantidad, y descripción.
-- Filtra los gastos por categoría o rango de fechas (por ejemplo, para ver solo los gastos de "transporte" o solo los del "último mes").
+5. **Generación del Reporte:**
+   Cuando el usuario solicita generar un reporte (semanal o mensual), el programa:
+   - **Lee el archivo JSON** para obtener los datos de los gastos registrados.
+   - **Filtra los gastos** según el rango de fechas correspondiente (últimos 7 días para el reporte semanal y mes actual para el reporte mensual).
+   - **Calcula el total de los gastos** en el rango de fechas especificado.
+   - **Muestra el reporte en consola**, con el total de los gastos y un desglose de cada uno de los gastos registrados, con su nombre, monto, categoría y fecha.
 
-3. Calcular Gastos Totales y por Categoría:
+## Funciones Principales del Programa
 
-- Calcula el total de gastos diarios, semanales o mensuales, y permite ver el gasto acumulado en cada categoría.
-- Proporciona un desglose por categorías para identificar en qué áreas se gasta más.
+1. **`generateWeek(filePath)`**
+   - Genera un reporte de los gastos registrados en la última semana (últimos 7 días desde la fecha actual).
+   - Muestra el total de los gastos de la semana y un desglose detallado de cada gasto con su nombre, monto, categoría y fecha.
 
-4. Generar Reporte:
+2. **`generateMonth(filePath)`**
+   - Genera un reporte de los gastos registrados en el mes actual.
+   - Muestra el total de los gastos del mes y un desglose detallado de cada gasto con su nombre, monto, categoría y fecha.
 
-- Genera un resumen o reporte de gastos en formato texto, detallando los totales diarios, semanales o mensuales, y los gastos en cada categoría.
-- El reporte puede guardarse en un archivo JSON o mostrarse en pantalla, según la preferencia del usuario.
+## Ejemplo de Ejecución
 
-5. Guardar y Cargar Datos:
+Supongamos que el archivo JSON contiene los siguientes gastos:
+```json
+[
+  {
+    "nombre": "Compra de alimentos",
+    "monto": 50.00,
+    "fecha": "2024-11-25",
+    "categoria": "Alimentos"
+  },
+  {
+    "nombre": "Transporte público",
+    "monto": 10.00,
+    "fecha": "2024-11-24",
+    "categoria": "Transporte"
+  },
+  {
+    "nombre": "Cine",
+    "monto": 20.00,
+    "fecha": "2024-11-15",
+    "categoria": "Entretenimiento"
+  }
+]
+```
 
-- Guarda automáticamente los registros en un archivo JSON cada vez que se registra o actualiza un gasto.
-- Carga los datos del archivo JSON al iniciar el programa, permitiendo al usuario retomar desde donde quedó en la última sesión.
+- **Generación del reporte semanal:**
+  Si hoy es `2024-11-26`, el reporte semanal incluirá los gastos del `2024-11-19` al `2024-11-26`, es decir, solo los gastos de `Transporte público` y `Compra de alimentos`.
 
-## **Resultado esperado**
+  El reporte se verá de la siguiente manera:
+  ```
+  Reporte Semanal:
+  Total de la semana: 60.00
+  Compra de alimentos - 50.00 - Alimentos - 2024-11-25
+  Transporte público - 10.00 - Transporte - 2024-11-24
+  ```
 
-La entrega de este proyecto se realizará de forma individual (Si el Trainer lo aplica lo podrá hacer en grupo), donde se debe anexar un enlace a un repositorio en GitHub privado (compartido como colaborador  a las cuentas que el trailer indique) llamado “Proyecto_Python_ApellidoNombre” (Proyecto_Python_Apellido1Nombre1Apellido2Nombre2 donde aplique) que contenga el código de la aplicación construida en Python. En este mismo repositorio, debe contener los siguientes archivos:
+- **Generación del reporte mensual:**
+  Si se genera el reporte mensual, incluirá todos los gastos desde el `01-11-2024` hasta la fecha actual (`2024-11-26`), es decir, los tres gastos mencionados.
 
-- Archivo principal de ejecución basado en Python.
-- Archivos modularizados que den funcionalidad al programa principal de Python.
-- Archivo JSON que almacene la información del programa en sí.
+  El reporte mensual se verá así:
+  ```
+  Reporte Mensual:
+  Total del mes: 80.00
+  Compra de alimentos - 50.00 - Alimentos - 2024-11-25
+  Transporte público - 10.00 - Transporte - 2024-11-24
+  Cine - 20.00 - Entretenimiento - 2024-11-15
+  ```
+
+## Recomendaciones
+
+- Asegúrate de ingresar las fechas de los gastos en el formato `YYYY-MM-DD` para evitar errores de formato.
+- Mantén el archivo JSON actualizado para obtener reportes precisos.
+- Revisa el reporte generado para asegurarte de que los gastos estén correctamente reflejados según el rango de fechas.

@@ -22,5 +22,11 @@
         "monto": 200000.0,
         "fecha": "2024-11-07",
         "categoría": "Indumentaria"
+    },
+    {
+        "nombre": "Limusina",
+        "monto": 99999.0,
+        "fecha": "2024-01-15",
+        "categoría": "Lujos"
     }
 ]

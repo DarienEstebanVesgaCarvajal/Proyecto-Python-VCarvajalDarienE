@@ -5,7 +5,7 @@ from modules.listExpenses.listByCategory import listByCategory
 from modules.listExpenses.listByDate import listByDate
 
 #Se muestra el menú principal al usuario
-def showMainMenu():
+def displayMenu():
     #Se imprime el menú con las opciones disponibles
     print("\nSeleccione una opción:")
     print("1. Registrar un nuevo gasto")

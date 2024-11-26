@@ -10,7 +10,7 @@ def mainMenu():
     filePath = 'databases/expenses.json'
     os.system('clear')
 
-    title = "Menú Principal del Simulador de Gasto Diario"
+    title = "Simulador de Gasto Diario"
     options = [
         "Registrar nuevo gasto",
         "Listar gastos",

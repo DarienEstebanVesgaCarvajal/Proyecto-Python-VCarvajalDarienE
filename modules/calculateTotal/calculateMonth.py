@@ -1,29 +1,37 @@
-from datetime import datetime
-import json
+from datetime import datetime  # Se importa la clase datetime para trabajar con fechas y horas.  
+import json  # Se importa el módulo json para manejar archivos JSON.  
 
-def calculateMonth(filePath):
-    try:
-        # Leer el JSON
-        with open(filePath, 'r') as file:
-            expenses = json.load(file)
+def calculateMonth(filePath):  
+    """  
+    Se encarga de calcular el total de gastos del mes actual a partir de un archivo JSON.  
+    
+    :param filePath: Se especifica la ruta del archivo JSON que contiene los gastos.  
+    """  
+    try:  
+        # Se lee el contenido del archivo JSON.  
+        with open(filePath, 'r') as file:  
+            expenses = json.load(file)  # Se cargan los datos del archivo en la variable 'expenses'.  
         
-        # Validar si hay datos
-        if not expenses:
-            print("No hay gastos registrados.")
-            return
+        # Se valida si hay datos en el archivo.  
+        if not expenses:  # Si la lista de gastos está vacía.  
+            print("No hay gastos registrados.")  # Se muestra un mensaje informativo.  
+            return  # Se sale de la función si no hay gastos registrados.  
 
-        # Obtener el mes y año actuales
-        today = datetime.today()
-        currentMonth = today.month
-        currentYear = today.year
+        # Se obtiene el mes y año actuales.  
+        today = datetime.today()  # Se obtiene la fecha y hora actuales.  
+        currentMonth = today.month  # Se extrae el mes actual.  
+        currentYear = today.year  # Se extrae el año actual.  
 
-        # Filtrar por el mes actual
-        totalMonth = sum(
-            expense['monto'] for expense in expenses 
-            if datetime.strptime(expense['fecha'], '%Y-%m-%d').month == currentMonth and 
-               datetime.strptime(expense['fecha'], '%Y-%m-%d').year == currentYear
-        )
+        # Se filtran los gastos por el mes y año actuales y se calcula el total.  
+        totalMonth = sum(  
+            expense['monto'] for expense in expenses   
+            if datetime.strptime(expense['fecha'], '%Y-%m-%d').month == currentMonth and  # Se compara el mes de cada gasto.  
+               datetime.strptime(expense['fecha'], '%Y-%m-%d').year == currentYear  # Se compara el año de cada gasto.  
+        )  
 
-        print(f"El total de gastos del mes es: COP {totalMonth}")
-    except Exception as e:
-        print(f"Ocurrió un error al calcular los gastos: {e}")
+        # Se muestra el total de gastos del mes.  
+        print(f"El total de gastos del mes es: COP {totalMonth}")  
+    
+    except Exception as e:  
+        # Se captura cualquier error que ocurra durante la ejecución.  
+        print(f"Ocurrió un error al calcular los gastos: {e}")  # Se muestra un mensaje de error.

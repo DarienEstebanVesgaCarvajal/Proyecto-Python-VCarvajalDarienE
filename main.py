@@ -11,4 +11,4 @@ if __name__ == "__main__":
         mainMenu()
     except KeyboardInterrupt:
         # Manejo de interrupciones por teclado
-        print("\nInterrupción detectada; por favor, use la opción 5 para salir.")
+        print("\nInterrupción detectada.")

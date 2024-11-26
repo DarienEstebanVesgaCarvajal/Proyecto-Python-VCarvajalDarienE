@@ -6,53 +6,50 @@ from tabulate import tabulate
 import os
 
 # Se lista los gastos dentro de un rango de fechas
-def listByDate():
-    filePath = 'databases/expenses.json'  # Ruta al archivo de datos
-    expenses = readJSON(filePath)  # Se leen los datos desde el archivo JSON
+def listByDate(databasePath):  # Se ajusta el nombre del parámetro
+    # Se leen los datos desde el archivo JSON
+    expenses = readJSON(databasePath)
 
-    # Se establece el título y las instrucciones
-    title = "Lista de Gastos por Rango de Fechas"
-    instructions = [
-        "Seleccione un rango de fechas para filtrar los gastos.",
-        "Las fechas deben estar en formato DD-MM-AA."
-    ]
+    # Valida si la estructura de datos es una lista
+    if not isinstance(expenses, list) or not expenses:
+        print("El archivo no contiene datos válidos o está vacío.")  # Se muestra un mensaje de error
+        return  # Se finaliza la función si la estructura es incorrecta
 
-    # Se calcula la longitud máxima para las líneas decorativas
-    maxLength = max(len(title), *(len(instruction) for instruction in instructions))
-    line = ":" * (maxLength + 4)
-
-    # Se limpia la pantalla y se muestra la cabecera
+    # Limpia la pantalla
     os.system('clear')
-    print(line)
-    print(f"{title:^{maxLength + 4}}")
-    print(line)
-    for instruction in instructions:
-        print(f"{instruction:<{maxLength}}")
-    print(line)
+    print("Lista de Gastos por Rango de Fechas")  # Se imprime el título del listado
+    print("Las fechas deben estar en formato DD-MM-AA.")  # Se especifica el formato de fechas
 
-    # Se solicitan las fechas al usuario
-    startDate = input("Ingrese la fecha de inicio (DD-MM-AA): ").strip()
-    endDate = input("Ingrese la fecha de fin (DD-MM-AA): ").strip()
-
-    # Se filtran los gastos por el rango de fechas
-    filteredExpenses = [
-        expense for expense in expenses["gastos"]
-        if startDate <= expense["fecha"] <= endDate
-    ]
-
-    # Se valida si hay gastos en el rango de fechas
-    if not filteredExpenses:
-        print(f"No se encontraron gastos entre '{startDate}' y '{endDate}'.")
+    # Solicita al usuario el rango de fechas
+    try:
+        startDate = input("Ingrese la fecha de inicio (DD-MM-AA): ").strip()  # Se pide la fecha inicial
+        endDate = input("Ingrese la fecha de fin (DD-MM-AA): ").strip()  # Se pide la fecha final
+    except KeyboardInterrupt:
+        print("\nOperación cancelada por el usuario.")  # Maneja la interrupción por teclado
         return
 
-    # Se prepara la tabla para mostrar los gastos filtrados
-    table = [
-        [expense["fecha"], expense["monto"], expense["moneda"], expense["categoría"], expense["descripción"]]
-        for expense in filteredExpenses
+    # Filtra los gastos por rango de fechas
+    filteredExpenses = [
+        expense for expense in expenses
+        if startDate <= expense["fecha"] <= endDate  # Compara las fechas ingresadas con las del archivo
     ]
 
-    # Se imprime la tabla
-    print(tabulate(table, headers=["Fecha", "Monto", "Moneda", "Categoría", "Descripción"], tablefmt="grid"))
-    print(line)
+    # Valida si hay resultados
+    if not filteredExpenses:
+        print(f"No se encontraron gastos entre '{startDate}' y '{endDate}'.")  # Muestra un mensaje si no hay resultados
+        return  # Se finaliza la función si no hay gastos en el rango
 
-    print("¡Listado por rango de fechas completado exitosamente!")
+    # Prepara los datos en una tabla
+    table = [
+        [
+            expense.get("fecha", "N/A"),
+            expense.get("nombre", "N/A"),
+            expense.get("categoria", expense.get("categoría", "N/A")),  # Maneja ambas claves
+            expense.get("monto", "N/A"),
+        ]
+        for expense in filteredExpenses  # Se recorre la lista filtrada para obtener los datos
+    ]
+
+    # Se imprime la tabla en formato tabular
+    print(tabulate(table, headers=["Fecha", "Nombre", "Categoría", "Monto"], tablefmt="grid"))
+    print("\n¡Listado por rango de fechas completado exitosamente!")  # Se confirma el listado completado

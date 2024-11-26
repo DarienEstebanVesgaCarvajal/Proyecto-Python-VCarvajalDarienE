@@ -1,0 +1,20 @@
+[
+    {
+        "nombre": "Alquiler",
+        "monto": 1000,
+        "fecha": "2024-11-01",
+        "categoria": "Vivienda"
+    },
+    {
+        "nombre": "Supermercado",
+        "monto": 150,
+        "fecha": "2024-11-05",
+        "categoria": "Alimentos"
+    },
+    {
+        "nombre": "MM",
+        "monto": 1000.0,
+        "fecha": "2024-11-26",
+        "categoría": "LULO"
+    }
+]

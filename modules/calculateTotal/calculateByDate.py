@@ -1,49 +1,46 @@
-# Se importa la función para leer datos de archivos JSON
-from modules.utils.fileHandler import readJSON
-# Se importa os para limpiar la pantalla
-import os
+# Se importa para trabajar con archivos JSON
+import json
 
-# Se calcula el total agrupado por fecha
-def calculateByDate():
-    filePath = 'databases/expenses.json'  # Ruta al archivo de datos
-    expenses = readJSON(filePath)  # Se leen los datos desde el archivo JSON
+# Se importan las clases datetime y timedelta de la librería datetime para trabajar con fechas  
+from datetime import datetime, timedelta  
 
-    # Se establece el título y las instrucciones
-    title = "Cálculo Total por Fecha"
-    instructions = [
-        "Calcula el total de gastos por fecha.",
-        "Los valores están en pesos colombianos (COP)."
-    ]
+# Se define la función calculateByDate que recibe la ruta del archivo y el modo de cálculo como parámetros  
+def calculateByDate(filePath, mode):  
+    try:  
+        # Se intenta abrir el archivo en modo lectura ('r')  
+        with open(filePath, 'r') as file:  
+            # Se carga el contenido del archivo JSON en la variable data  
+            data = json.load(file)  
+        
+        # Se verifica si el archivo no contiene datos  
+        if not data:  
+            print("No hay gastos registrados.")  
+            return  # Se sale de la función si no hay gastos  
 
-    # Se calcula la longitud máxima para las líneas decorativas
-    maxLength = max(len(title), *(len(instruction) for instruction in instructions))
-    line = ":" * (maxLength + 4)
+        # Se obtiene la fecha de hoy  
+        today = datetime.today().date()  
+        
+        # Se determina la fecha de inicio según el modo especificado  
+        if mode == "diario":  
+            startDate = today  # Para modo diario, la fecha de inicio es hoy  
+        elif mode == "semanal":  
+            startDate = today - timedelta(days=7)  # Para modo semanal, se resta 7 días a la fecha de hoy  
+        elif mode == "mensual":  
+            startDate = today.replace(day=1)  # Para modo mensual, se establece el primer día del mes actual  
+        else:  
+            print("Modo inválido.")  # Se maneja un modo no válido  
+            return  
 
-    # Se limpia la pantalla y se muestra la cabecera
-    os.system('clear')
-    print(line)
-    print(f"{title:^{maxLength + 4}}")
-    print(line)
-    for instruction in instructions:
-        print(f"{instruction:<{maxLength}}")
-    print(line)
+        # Se filtran los gastos que ocurren desde la fecha de inicio  
+        filteredExpenses = [  
+            expense for expense in data  
+            if datetime.strptime(expense['date'], '%Y-%m-%d').date() >= startDate  
+        ]  
 
-    # Se valida si hay gastos para calcular
-    if not expenses["gastos"]:
-        print("No hay datos disponibles para calcular totales por fecha.")
-        return
-
-    # Se agrupan los totales por fecha
-    dates = {}
-    for expense in expenses["gastos"]:
-        date = expense["fecha"]
-        amount = expense["monto"] if expense["moneda"] == "COP" else expense["monto"] * 4500
-        dates[date] = dates.get(date, 0) + amount
-
-    # Se muestran los totales por fecha
-    print("Totales Calculados por Fecha (en COP):")
-    for date, total in sorted(dates.items()):
-        print(f"  {date}: {total}")
-    print(line)
-
-    print("¡Cálculo completado exitosamente!")
+        # Se calcula el total de los gastos filtrados  
+        total = sum(expense['amount'] for expense in filteredExpenses)  
+        # Se imprime el total de gastos según el modo seleccionado  
+        print(f"El total de gastos {mode} es: {total}")  
+    except Exception as e:  
+        # Se maneja cualquier excepción que se produzca y se imprime un mensaje de error  
+        print(f"Ocurrió un error al calcular los gastos: {e}")

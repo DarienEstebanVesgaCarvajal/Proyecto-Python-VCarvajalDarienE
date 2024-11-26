@@ -1,20 +1,25 @@
+# Se importa la función para leer datos de archivos JSON
 from modules.utils.fileHandler import readJSON
-from tabulate import tabulate
+# Se importa os para limpiar la pantalla
 import os
 
+# Se calcula el total por categoría
 def calculateByCategory():
-    filePath = 'databases/expenses.json'
-    expenses = readJSON(filePath)
+    filePath = 'databases/expenses.json'  # Ruta al archivo de datos
+    expenses = readJSON(filePath)  # Se leen los datos desde el archivo JSON
 
+    # Se establece el título y las instrucciones
     title = "Cálculo Total por Categoría"
     instructions = [
-        "Calcula el gasto total agrupado por categoría.",
-        "Convierte los montos en USD a COP para unificar los totales."
+        "Calcula el total agrupado de gastos por categoría.",
+        "Los valores están en pesos colombianos (COP)."
     ]
 
+    # Se calcula la longitud máxima para las líneas decorativas
     maxLength = max(len(title), *(len(instruction) for instruction in instructions))
     line = ":" * (maxLength + 4)
 
+    # Se limpia la pantalla y se muestra la cabecera
     os.system('clear')
     print(line)
     print(f"{title:^{maxLength + 4}}")
@@ -23,19 +28,22 @@ def calculateByCategory():
         print(f"{instruction:<{maxLength}}")
     print(line)
 
+    # Se valida si hay gastos para calcular
     if not expenses["gastos"]:
-        print("No hay datos disponibles para calcular por categoría.")
+        print("No hay datos disponibles para calcular totales por categoría.")
         return
 
+    # Se agrupan los totales por categoría
     categories = {}
-    for gasto in expenses["gastos"]:
-        category = gasto["categoría"]
-        amount = gasto["monto"] if gasto["moneda"] == "COP" else gasto["monto"] * 4500
+    for expense in expenses["gastos"]:
+        category = expense["categoría"]
+        amount = expense["monto"] if expense["moneda"] == "COP" else expense["monto"] * 4500
         categories[category] = categories.get(category, 0) + amount
 
-    categoryTable = [[category, amount] for category, amount in categories.items()]
-    print("Totales por Categorías (en COP):")
-    print(tabulate(categoryTable, headers=["Categoría", "Monto (COP)"], tablefmt="grid"))
+    # Se muestran los totales por categoría
+    print("Totales Calculados por Categoría (en COP):")
+    for category, total in sorted(categories.items()):
+        print(f"  {category}: {total}")
     print(line)
 
     print("¡Cálculo completado exitosamente!")

@@ -1,43 +1,38 @@
-from modules.registerExpense import registerExpense
-from modules.listExpenses import listExpenses
-from modules.calculateTotal import calculateTotal
-from modules.listExpenses.listByCategory import listByCategory
-from modules.listExpenses.listByDate import listByDate
+from modules.utils.menuDisplay import displayMenu
+from modules.utils.fileHandler import readJSON
+from modules.register.registerExpense import registerExpense
+from modules.listExpenses.listMenu import listExpensesMenu
+from modules.calculateTotal.calculateMenu import calculateTotalMenu
+from modules.generateReports.generateMenu import generateReportsMenu
+import os
 
-#Se muestra el menú principal al usuario
-def displayMenu():
-    #Se imprime el menú con las opciones disponibles
-    print("\nSeleccione una opción:")
-    print("1. Registrar un nuevo gasto")
-    print("2. Listar todos los gastos")
-    print("3. Calcular total de gastos por moneda")
-    print("4. Listar gastos por categoría")
-    print("5. Listar gastos por rango de fechas")
-    print("6. Salir")
+def mainMenu():
+    filePath = 'databases/expenses.json'
+    os.system('clear')
 
-    #Se solicita la opción al usuario
-    option = input("Seleccione una opción (1-6): ").strip()
+    title = "Menú Principal del Simulador de Gasto Diario"
+    options = [
+        "Registrar nuevo gasto",
+        "Listar gastos",
+        "Calcular total de gastos",
+        "Generar reporte de gastos",
+        "Salir"
+    ]
 
-    #Se evalúa la opción ingresada
-    if option == "1":
-        #Se llama a la función para registrar un gasto
-        registerExpense()
-    elif option == "2":
-        #Se llama a la función para listar todos los gastos
-        listExpenses()
-    elif option == "3":
-        #Se llama a la función para calcular el total de gastos
-        calculateTotal()
-    elif option == "4":
-        #Se llama a la función para listar los gastos por categoría
-        listByCategory()
-    elif option == "5":
-        #Se llama a la función para listar los gastos por rango de fechas
-        listByDate()
-    elif option == "6":
-        #Se imprime un mensaje de despedida y se cierra el programa
-        print("Saliendo del programa...")
-        exit()
-    else:
-        #Se notifica al usuario sobre una opción no válida
-        print("Opción no válida. Por favor, intente nuevamente.")
+    while True:
+        displayMenu(title, options)
+        choice = input("Seleccione una opción: ")
+
+        if choice == "1":
+            registerExpense(filePath)
+        elif choice == "2":
+            listExpensesMenu(filePath)
+        elif choice == "3":
+            calculateTotalMenu(filePath)
+        elif choice == "4":
+            generateReportsMenu(filePath)
+        elif choice == "5":
+            print("Saliendo del programa... ¡Hasta luego!")
+            break
+        else:
+            print("Opción inválida. Inténtelo nuevamente.")

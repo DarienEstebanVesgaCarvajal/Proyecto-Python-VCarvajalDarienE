@@ -1,7 +1,7 @@
+from modules.calculateTotal.calculateDay import calculateDay
+from modules.calculateTotal.calculateWeek import calculateWeek
+from modules.calculateTotal.calculateMonth import calculateMonth
 from modules.utils.menuDisplay import displayMenu
-from modules.calculateTotal.calculateByCategory import calculateByCategory
-from modules.calculateTotal.calculateByDate import calculateByDate
-from modules.calculateTotal.calculateTotal import calculateTotal
 import os
 
 def calculateTotalMenu(filePath):
@@ -20,11 +20,11 @@ def calculateTotalMenu(filePath):
         choice = input("Seleccione una opción: ")
 
         if choice == "1":
-            calculateByDate(filePath, "diario")
+            calculateDay(filePath)
         elif choice == "2":
-            calculateByDate(filePath, "semanal")
+            calculateWeek(filePath)
         elif choice == "3":
-            calculateByDate(filePath, "mensual")
+            calculateMonth(filePath)
         elif choice == "4":
             break
         else:

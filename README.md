@@ -1,6 +1,3 @@
-Claro, aquí tienes el instructivo completo en formato para un archivo `README.md`:
-
-```markdown
 # Simulador de Gasto Diario
 
 Este programa permite registrar y generar reportes de los gastos en diferentes rangos de tiempo, ya sea semanal o mensual. Los datos de los gastos se almacenan en un archivo JSON y se pueden visualizar a través de la consola en formato tabular.
